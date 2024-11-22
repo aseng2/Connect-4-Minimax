@@ -11,10 +11,12 @@ PLAYER2_TURN = 1
 PLAYER1_PIECE = 1
 PLAYER2_PIECE = 2
 
+# Create board
 def create_board():
     board = numpy.zeros((ROW_COUNT, COLUMN_COUNT))
     return board
 
+# Drop the Piece
 def drop_piece(board, row, col, piece):
     board[row][col] = piece
 
@@ -22,11 +24,13 @@ def drop_piece(board, row, col, piece):
 def is_valid_location(board, col):
     return board[ROW_COUNT-1][col] == 0
 
+# Get the open row
 def get_open_row(board, col):
     for r in range(ROW_COUNT):
         if board[r][col] == 0:
             return r
 
+# Prints the game board
 def print_board(board):
     flipped_board = numpy.flip(board, 0)
     rows, cols = flipped_board.shape
