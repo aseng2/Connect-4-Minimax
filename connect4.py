@@ -44,7 +44,7 @@ def print_board(board):
         print()
     print("-" * (cols*4))
 
-    print("|", end= "")
+    print("| ", end= "")
     for j in range(cols):
         print(f"{j}", end= " | ")
 
@@ -205,7 +205,7 @@ while not game_over:
         print("\n")
         turn +=1
 
-    #This will turn into the AI 
+    # This will turn into the AI 
     # if turn % 2 == PLAYER2_TURN and not game_over:
     #     col = int(input("Player 2 Make your selection (0-6): "))
     #     if is_valid_location(board, col):
@@ -222,12 +222,12 @@ while not game_over:
         if is_valid_location(board, col):
             row = get_open_row(board, col)
             drop_piece(board, row, col, PLAYER2_PIECE)
+            print_board(board)
 
             if winning_move(board, PLAYER2_PIECE):
                 print("AI wins!")
                 game_over = True
                 break
         
-        print_board(board)
         print("\n")
         turn +=1
