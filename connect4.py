@@ -226,6 +226,7 @@ while not game_over:
             if winning_move(board, PLAYER2_PIECE):
                 print("AI wins!")
                 game_over = True
+                break
         
         print_board(board)
         print("\n")
