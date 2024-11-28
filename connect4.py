@@ -22,6 +22,8 @@ def drop_piece(board, row, col, piece):
 
 # Checks if the col is free
 def is_valid_location(board, col):
+    if col < 0 or col >= COLUMN_COUNT:
+        return False
     return board[ROW_COUNT-1][col] == 0
 
 # Get the open row
@@ -190,20 +192,26 @@ print("\n")
 # Game Loop
 while not game_over:
     if turn % 2 == PLAYER1_TURN:
-        col = int(input("Player 1 Make your selection (0-6): "))
+        try:
+            col = int(input("Player 1 Make your selection (0-6): "))
+        except ValueError:
+            print("Invalid input, try again")
+            continue
         if is_valid_location(board, col):
             row = get_open_row(board, col)
             drop_piece(board, row, col, PLAYER1_PIECE)
+            print_board(board)
+            print("\n")
+            turn +=1
 
             if winning_move(board, PLAYER1_PIECE):
                 print("Player 1 win, congratulations!")
                 game_over = True 
                 print_board(board)
                 break
-        
-        print_board(board)
-        print("\n")
-        turn +=1
+        else:
+            print("Invalid location, try again")
+
 
     # This will turn into the AI 
     # if turn % 2 == PLAYER2_TURN and not game_over:
@@ -223,11 +231,11 @@ while not game_over:
             row = get_open_row(board, col)
             drop_piece(board, row, col, PLAYER2_PIECE)
             print_board(board)
+            print("\n")
+            turn +=1
 
             if winning_move(board, PLAYER2_PIECE):
                 print("AI wins!")
                 game_over = True
                 break
         
-        print("\n")
-        turn +=1
