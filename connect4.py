@@ -11,6 +11,16 @@ PLAYER2_TURN = 1
 PLAYER1_PIECE = 1
 PLAYER2_PIECE = 2
 
+# Position value table
+position_values = [
+    [2, 3, 4, 5, 4, 3, 2],  # Row 6
+    [3, 4, 5, 6, 5, 4, 3],  # Row 5
+    [4, 5, 9, 10, 9, 5, 4],  # Row 4
+    [7, 9, 12, 12, 12, 9, 7],  # Row 3
+    [4, 5, 10, 10, 10, 5, 4],  # Row 2
+    [2, 3, 4, 4, 4, 3, 2],  # Row 1
+]
+
 # Create board
 def create_board():
     board = numpy.zeros((ROW_COUNT, COLUMN_COUNT))
@@ -89,30 +99,42 @@ def is_terminal_node(board):
 
 def score_position(board, piece):
     score = 0
-    center_array = [int(board[r][COLUMN_COUNT//2]) for r in range(ROW_COUNT)]
-    center_count = center_array.count(piece)
-    score += center_count * 3
 
+    # Add position values for each piece of the given player
     for r in range(ROW_COUNT):
-        row_array = [int(i) for i in list(board[r,:])]
-        for c in range(COLUMN_COUNT-3):
-            window = row_array[c:c+4]
+        for c in range(COLUMN_COUNT):
+            if board[r][c] == piece:
+                score += position_values[r][c]
+
+    # Add other scoring heuristics (center control, streaks)
+    center_array = [int(board[r][COLUMN_COUNT // 2]) for r in range(ROW_COUNT)]
+    center_count = center_array.count(piece)
+    score += center_count * 3  # Center control is still important
+
+    # Evaluate horizontal streaks
+    for r in range(ROW_COUNT):
+        row_array = [int(i) for i in list(board[r, :])]
+        for c in range(COLUMN_COUNT - 3):
+            window = row_array[c:c + 4]
             score += evaluate_window(window, piece)
 
+    # Evaluate vertical streaks
     for c in range(COLUMN_COUNT):
         col_array = [int(board[r][c]) for r in range(ROW_COUNT)]
-        for r in range(ROW_COUNT-3):
-            window = col_array[r:r+4]
+        for r in range(ROW_COUNT - 3):
+            window = col_array[r:r + 4]
             score += evaluate_window(window, piece)
 
-    for r in range(ROW_COUNT-3):
-        for c in range(COLUMN_COUNT-3):
-            window = [board[r+i][c+i] for i in range(4)]
+    # Evaluate positively sloped diagonals
+    for r in range(ROW_COUNT - 3):
+        for c in range(COLUMN_COUNT - 3):
+            window = [board[r + i][c + i] for i in range(4)]
             score += evaluate_window(window, piece)
 
-    for r in range(ROW_COUNT-3):
-        for c in range(COLUMN_COUNT-3):
-            window = [board[r+3-i][c+i] for i in range(4)]
+    # Evaluate negatively sloped diagonals
+    for r in range(ROW_COUNT - 3):
+        for c in range(COLUMN_COUNT - 3):
+            window = [board[r + 3 - i][c + i] for i in range(4)]
             score += evaluate_window(window, piece)
 
     return score
@@ -237,5 +259,6 @@ while not game_over:
             if winning_move(board, PLAYER2_PIECE):
                 print("AI wins!")
                 game_over = True
+                print_board(board)
                 break
         
