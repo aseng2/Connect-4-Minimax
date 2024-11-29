@@ -248,7 +248,7 @@ while not game_over:
     #             print_board(board)
     #             break
     else:
-        col, minimax_score = minimax(board, 5, -math.inf, math.inf, True)
+        col, minimax_score = minimax(board, 4, -math.inf, math.inf, True)
         if is_valid_location(board, col):
             row = get_open_row(board, col)
             drop_piece(board, row, col, PLAYER2_PIECE)
