@@ -10,3 +10,7 @@ To run the program
 ```
 python3 connect4.py
 ```
+Or
+```
+python connect4.py
+```
