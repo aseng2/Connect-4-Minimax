@@ -213,6 +213,10 @@ print("\n")
 
 # Game Loop
 while not game_over:
+    if turn == 42:
+        print("It's a tie!")
+        game_over = True
+        break
     if turn % 2 == PLAYER1_TURN:
         try:
             col = int(input("Player 1 Make your selection (0-6): "))
